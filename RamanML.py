@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import torch
 import torch.nn as nn
@@ -62,7 +61,7 @@ class Autoencoder(nn.Module):
 def train_autoencoder(X_train, input_dim, latent_dim, epochs=100):
     autoencoder = Autoencoder(input_dim=input_dim, latent_dim=latent_dim)
     criterion = nn.MSELoss()
-    optimizer = torch.optim.Adam(autoencoder.parameters(), lr=0.001)
+    optimizer = torch.optim.AdamW(autoencoder.parameters(), lr=0.001)
 
     train_loader = DataLoader(TensorDataset(X_train), batch_size=64, shuffle=True)
 
@@ -99,7 +98,7 @@ class AdaptivePartialClassifier(nn.Module):
 def train_classifier(X_train_latent, y_train, latent_dim, output_dim, hidden_dim=32, epochs=100):
     classifier = AdaptivePartialClassifier(input_dim=latent_dim, hidden_dim=hidden_dim, output_dim=output_dim)
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(classifier.parameters(), lr=0.001)
+    optimizer = torch.optim.AdamW(classifier.parameters(), lr=0.001)
 
     train_loader = DataLoader(TensorDataset(X_train_latent, y_train), batch_size=64, shuffle=True)
 
