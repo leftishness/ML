@@ -96,7 +96,7 @@ class AdaptivePartialClassifier(nn.Module):
         logits = self.fc2(x)
         return logits
 
-def train_classifier(X_train_latent, y_train, latent_dim, output_dim, hidden_dim=32, epochs=50):
+def train_classifier(X_train_latent, y_train, latent_dim, output_dim, hidden_dim=32, epochs=100):
     classifier = AdaptivePartialClassifier(input_dim=latent_dim, hidden_dim=hidden_dim, output_dim=output_dim)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(classifier.parameters(), lr=0.001)
@@ -122,16 +122,9 @@ def train_classifier(X_train_latent, y_train, latent_dim, output_dim, hidden_dim
             correct_predictions += (predictions == batch_y).sum().item()
             total_predictions += batch_y.size(0)
 
-            # Update loss in the progress bar during each batch
             avg_loss = epoch_loss / len(train_loader)
-            progress_bar.set_postfix(loss=avg_loss)
-
-        # Calculate accuracy after all batches are processed
-        accuracy = correct_predictions / total_predictions
-
-        # Update the progress bar with final loss and accuracy for the epoch
-        progress_bar.set_postfix(loss=avg_loss, accuracy=accuracy)
-        progress_bar.close()  # Close the progress bar to ensure it updates correctly at the end of each epoch
+            accuracy = correct_predictions / total_predictions
+            progress_bar.set_postfix(loss=avg_loss, accuracy=accuracy)
 
     return classifier
 
